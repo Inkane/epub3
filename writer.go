@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mdigger/commitfile"
 	"github.com/pborman/uuid"
 )
 
@@ -27,7 +26,7 @@ const (
 
 // Writer allows you to create publications in epub 3 format.
 type Writer struct {
-	file      *commitfile.File
+	file      *os.File
 	zipWriter *zip.Writer
 	Metadata  *Metadata
 	manifest  []*Item
@@ -38,7 +37,7 @@ type Writer struct {
 // Create new epub publication.
 func Create(filename string) (writer *Writer, err error) {
 	// Создаем временный файл с публикацией
-	file, err := commitfile.Create(filename)
+	file, err := os.Create(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -226,6 +225,5 @@ func (w *Writer) Close() (err error) {
 		return err
 	}
 	// Отменяем автоудаление файла
-	w.file.Commit()
 	return nil
 }
